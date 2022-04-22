@@ -4,8 +4,40 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Checking some dependencies
+    - name: Installing some packages
+      packages:
+        - vim
+        - git
+        - wget
+        - java
+      state: latest
+
+    - name: Download foo.conf
+      get_url:
+        url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+        mode: '0440'
       
+    - name: Import a key from a url
+      rpm_key:
+      state: present
+      key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+    - name: Update all packages to their latest version
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400
+
+    - name: Installing Jenkins
+      yum:
+        name: jenkins
+        state: present
+
+    - name: Make sure a service unit is running
+      systemd:
+        name: jenkins
+        state: started
 
 
 
