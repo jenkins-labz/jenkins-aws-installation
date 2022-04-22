@@ -30,7 +30,7 @@
         cache_valid_time: 86400
 
     - name: Installing Jenkins
-      yum:
+      packages:
         name: jenkins
         state: present
 
@@ -38,8 +38,4 @@
       systemd:
         name: jenkins
         state: started
-
-
-
-
 ...
