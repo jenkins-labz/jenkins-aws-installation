@@ -1,5 +1,5 @@
 ---
-- name: Installing Jenkins server
+- name: Installing Jenkins server on AWS
   hosts: elliot01
   become: true
   gather_facts: false
@@ -19,28 +19,28 @@
           - vim
         state: latest
 
-    - name: Download foo.conf
+    - name: Download the Jenkins
       get_url:
         url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
         dest: /etc/yum.repos.d/jenkins.repo
         mode: '0440'
       
-    - name: Import a key from a url
+    - name: Import a Jenkins key from a url
       rpm_key:
         state: present
         key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
 
-    - name: Update all packages to their latest version
+    - name: Refresh the repository
       yum:
         update_cache: yes
       ignore_errors: true
 
-    - name: Installing Jenkins
+    - name: Install Jenkins
       yum:
         name: jenkins
         state: latest
 
-    - name: Make sure a service unit is running
+    - name: Make sure the Jenkins is running
       systemd:
         name: jenkins
         state: started
