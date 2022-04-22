@@ -1,0 +1,13 @@
+---
+- name: Installing Jenkins server
+  hosts: prod
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Checking some dependencies
+      
+
+
+
+
+...
