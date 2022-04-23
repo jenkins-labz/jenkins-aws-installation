@@ -32,8 +32,8 @@ Use the AWS Documentation to setup your AWS Credentials, basically you have some
 
 ```
 [default]
-aws_access_key_id=AKIAIOSFODNN7EXAMPLE
-aws_secret_access_key=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+aws_access_key_id=""
+aws_secret_access_key=""
 ```
 
 ## Create a AWS Key pairs
