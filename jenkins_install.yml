@@ -1,46 +1,47 @@
 ---
-- name: Installing Jenkins server on AWS
-  hosts: elliot01
+- name: Installing Jenkins server
+  hosts: all
   become: true
+  remote_user: ubuntu
   gather_facts: false
   tasks:
-    - name: Update all packages
-      yum:
-        name: "*"
-        state: latest
-      ignore_errors: yes
+    - name: Update all packages to their latest version
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400
+      ignore_errors: true
 
     - name: Installing some packages
-      yum:
+      apt:
         name: 
           - wget
-          - java
           - git
+          - curl
+          - openjdk-11-jre
           - vim
         state: latest
+      ignore_errors: true
 
-    - name: Download the Jenkins
-      get_url:
-        url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
-        dest: /etc/yum.repos.d/jenkins.repo
-        mode: '0440'
-      
-    - name: Import a Jenkins key from a url
-      rpm_key:
-        state: present
-        key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+    - name: checking repository
+      shell: |
+        curl -fsSL https://pkg.jenkins.io/debian/jenkins.io.key | sudo tee \
+        /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+        echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+        https://pkg.jenkins.io/debian binary/ | sudo tee \
+        /etc/apt/sources.list.d/jenkins.list > /dev/null
 
-    - name: Refresh the repository
-      yum:
+    - name: Update all packages to their latest version
+      apt:
         update_cache: yes
       ignore_errors: true
 
-    - name: Install Jenkins
-      yum:
+    - name: Installing Jenkins
+      apt:
         name: jenkins
         state: latest
 
-    - name: Make sure the Jenkins is running
+    - name: Make sure a service unit is running
       systemd:
         name: jenkins
         state: started

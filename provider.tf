@@ -10,7 +10,7 @@ terraform {
 provider "aws" {
   region = var.region
   shared_credentials_file = "/home/amaury/.aws/credencials"
-  profile = "sre"
+  profile = "devops"
 }
 
 resource "aws_instance" "tutorials" {
